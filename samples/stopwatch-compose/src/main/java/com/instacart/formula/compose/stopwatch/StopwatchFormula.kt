@@ -12,12 +12,14 @@ class StopwatchFormula : Formula<Unit, StopwatchFormula.State, StopwatchRenderMo
 
     data class State(
         val timePassedInMillis: Long,
-        val isRunning: Boolean
+        val isRunning: Boolean,
+        val toggleState: Boolean
     )
 
     override fun initialState(input: Unit): State = State(
         timePassedInMillis = 0,
-        isRunning = false
+        isRunning = false,
+        toggleState = false
     )
 
     override fun Snapshot<Unit, State>.evaluate(): Evaluation<StopwatchRenderModel> {
@@ -25,7 +27,8 @@ class StopwatchFormula : Formula<Unit, StopwatchFormula.State, StopwatchRenderMo
             output = StopwatchRenderModel(
                 timePassed = formatTimePassed(state.timePassedInMillis),
                 startStopButton = startStopButton(),
-                resetButton = resetButton()
+                resetButton = resetButton(),
+                switchControl = switchControl()
             ),
             actions = context.actions {
                 if (state.isRunning) {
@@ -82,6 +85,18 @@ class StopwatchFormula : Formula<Unit, StopwatchFormula.State, StopwatchRenderMo
             text = "Reset",
             onSelected = context.onEvent {
                 transition(state.copy(timePassedInMillis = 0, isRunning = false))
+            }
+        )
+    }
+
+    private fun Snapshot<*, State>.switchControl(): SwitchRenderModel {
+        return SwitchRenderModel(
+            isChecked = state.toggleState,
+            onCheckedChange = context.onEvent {
+                val newState = !state.toggleState
+                transition(state.copy(toggleState = newState)) {
+                    println("toggle switch state to: $newState")
+                }
             }
         )
     }

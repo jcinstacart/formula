@@ -11,12 +11,14 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.instacart.formula.android.Feature
 import com.instacart.formula.android.FeatureFactory
 import com.instacart.formula.android.compose.ComposeViewFactory
@@ -47,6 +49,8 @@ class StopwatchViewFactory : ComposeViewFactory<StopwatchRenderModel>() {
                                 Spacer(Modifier.size(Dp(8f)))
                                 StopwatchButton(model.resetButton)
                             }
+                            Spacer(Modifier.size(8f.dp))
+                            SwitchControl(model.switchControl)
                         }
                     }
                 }
@@ -65,5 +69,16 @@ class StopwatchViewFactory : ComposeViewFactory<StopwatchRenderModel>() {
                 Text(text = model.text, color = Color.White)
             }
         )
+    }
+
+    @Composable
+    fun SwitchControl(model: SwitchRenderModel) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Switch(
+                checked = model.isChecked,
+                onCheckedChange = model.onCheckedChange::invoke
+            )
+            Text(text = "toggle is ${if (model.isChecked) "on" else "off"}")
+        }
     }
 }

@@ -2,8 +2,8 @@ package com.instacart.formula.android.internal
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentInspector
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.isHeadless
 import com.instacart.formula.android.FragmentId
 import com.instacart.formula.android.FragmentKey
 import com.instacart.formula.android.BaseFormulaFragment
@@ -17,7 +17,7 @@ import java.util.UUID
 internal object FragmentLifecycle {
 
     internal fun shouldTrack(fragment: Fragment): Boolean {
-        return !fragment.retainInstance && !FragmentInspector.isHeadless(fragment)
+        return !fragment.retainInstance && !fragment.isHeadless()
     }
 
     internal fun isKept(fragmentManager: FragmentManager, fragment: Fragment): Boolean {
